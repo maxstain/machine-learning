@@ -1,0 +1,23 @@
+Il s'agit d'une entreprise de services d'assurance voyage tierce, basée à Singapour.
+
+Les attributs :
+
+Target: Claim Status (Claim.Status)
+Name of agency (Agency)
+Type of travel insurance agencies (Agency.Type)
+Distribution channel of travel insurance agencies (Distribution.Channel)
+Name of the travel insurance products (Product.Name)
+Duration of travel (Duration)
+Destination of travel (Destination)
+Amount of sales of travel insurance policies (Net.Sales)
+Commission received for travel insurance agency (Commission)
+Gender of insured (Gender)
+Age of insured (Age)
+
+ 
+
+L'objectif de ce projet est :
+* Nettoyer le dataset
+*Effectuer le clustering des données en comparant les performances de différents algorithmes (Kmeans, CAH, DBSCAN, GMM…)
+* Prédire "Claim Status (Yes or No)" en utilisant les méthodes ensemblistes (Randomforest, xgboost, adaboost…)
+* Développer un site web avec la technologie de votre choix (Django, Flask, FastAPI, ...) permettant d'effectuer des prédictions en utilisant le modèle optimal sélectionné.
