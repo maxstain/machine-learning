@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+    <a class="btn btn-primary" href="/">Go Back</a>
+    <h1>Prediction Result</h1>
+    <p>Your prediction result is:</p>
+    <div class="alert alert-info">
+        <strong>Prediction:</strong> {{ prediction }}
+    </div>
+    <p>Thank you for using our prediction service!</p>
+</div>
+{% endblock %}
