@@ -1,12 +1,27 @@
+<!-- index.html -->
 {% extends "base.html" %}
 
 {% block content %}
-<div>
-    <h1>Machine Learning</h1>
-    <p>Welcome to the Machine Learning page!</p>
-    <p>Here you can find various resources and information about machine learning.</p>
-    <form action="/predict" method="post">
-        <button class="btn btn-success" type="submit">Predict</button>
+<div class="container mt-4">
+    <h1>Machine Learning Prediction</h1>
+    <p>Welcome to the Machine Learning prediction page! Enter the data below to predict the claim status.</p>
+    <form action="/predict" method="POST" id="predict-form">
+        <div class="form-group">
+            <label for="data">Enter JSON data:</label>
+            <textarea class="form-control" name="data" id="data" rows="10" placeholder='{
+    "Agency": "Agency A",
+    "Agency.Type": "Corporate",
+    "Distribution.Channel": "Online",
+    "Product.Name": "Comprehensive",
+    "Duration": 15,
+    "Destination": "Europe",
+    "Net.Sales": 1000.00,
+    "Commission": 50.00,
+    "Gender": "Male",
+    "Age": 30
+}'></textarea>
+        </div>
+        <button class="btn btn-success mt-3" type="submit">Predict</button>
     </form>
 </div>
 {% endblock %}
