@@ -18,12 +18,11 @@
             <ul class="nav">
                 <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="/predict">Predict</a></li>
-                <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
             </ul>
         </div>
     </nav>
 </header>
-<main class="container mt-4 mb-4">
+<main class="container mt-4 mb-4 vh-100">
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     {% for message in messages %}

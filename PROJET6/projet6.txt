@@ -18,6 +18,6 @@ Age of insured (Age)
 
 L'objectif de ce projet est :
 * Nettoyer le dataset
-*Effectuer le clustering des données en comparant les performances de différents algorithmes (Kmeans, CAH, DBSCAN, GMM…)
+* Effectuer le clustering des données en comparant les performances de différents algorithmes (Kmeans, CAH, DBSCAN, GMM…)
 * Prédire "Claim Status (Yes or No)" en utilisant les méthodes ensemblistes (Randomforest, xgboost, adaboost…)
 * Développer un site web avec la technologie de votre choix (Django, Flask, FastAPI, ...) permettant d'effectuer des prédictions en utilisant le modèle optimal sélectionné.
