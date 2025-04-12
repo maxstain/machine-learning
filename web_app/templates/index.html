@@ -1,0 +1,16 @@
+<!-- index.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Insurance Claim Prediction</h1>
+    <form action="{{ url_for('predict') }}" method="post">
+        <div>
+            <label for="agency_type">Agency Type:</label>
+            <input id="agency_type" type="text" name="agency_type" required>
+        </div>
+        <!-- Add other input fields for all features -->
+        <button type="submit">Predict</button>
+    </form>
+</div>
+{% endblock %}

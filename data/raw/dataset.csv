@@ -1,4 +1,4 @@
-Agency,Agency Type,Distribution Channel,Product Name,Claim,Duration,Destination,Net Sales,Commision (in value),Gender,Age
+Agency,Agency Type,Distribution Channel,Product Name,Claim,Duration,Destination,Net Sales,Commission (in value),Gender,Age
 JZI,Airlines,Online,Basic Plan,No,104.0,"TAIWAN, PROVINCE OF CHINA",35.0,12.25,M,34.0
 EPX,Travel Agency,Online,Cancellation Plan,No,47.0,CHILE,80.0,0.0,,36.0
 EPX,Travel Agency,Online,2 way Comprehensive Plan,No,63.0,CHINA,35.0,0.0,,36.0
