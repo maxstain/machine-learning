@@ -28,13 +28,18 @@ def index():
 
 @app.route('/predict', methods=['POST'])  # This line is crucial - methods=['POST']
 def predict():
+    mdl = MLModel()
+    mdl.process_dataset()
     try:
         if request.method == 'POST':
             agency_type = request.form['agency_type']
+            if not agency_type:
+                return render_template('index.html', error="Please enter an agency type.")
+            mdl.load_model()
             # Your prediction logic here
             logger.info(f"Received prediction request for agency type: {agency_type}")
-            prediction = "Your prediction result"  # Replace with actual prediction
-            return render_template('result.html', prediction=prediction)
+            prediction = mdl.predict(agency_type)
+            return render_template('predict.html', prediction=prediction)
     except Exception as e:
         logger.error(f"Unhandled exception: {str(e)}")
         return render_template('error.html', error=str(e)), 500

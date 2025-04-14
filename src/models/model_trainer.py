@@ -3,15 +3,34 @@ import os
 from datetime import datetime
 from src.utils.public_imports import *
 
+import pandas as pd
+
+
+def _load_data():
+    """
+    Load the processed training data from a CSV file.
+
+    Returns:
+        X: Features
+        y: Labels
+    """
+    try:
+        df = pd.read_csv('data/processed/processed_data.csv')
+        X = df.drop('target', axis=1)
+        y = df['target']
+        return X, y
+    except Exception as e:
+        print(f"Error loading data: {str(e)}")
+        return None, None
+
 
 class ModelTrainer:
     def __init__(self, model_path='models/'):
-        """
-        Initialize the ModelTrainer with a set of models and path for saving
-
-        Args:
-            model_path (str): Path to save trained models
-        """
+        self.data_path = os.path.join('data', 'processed', 'processed_data.csv')
+        # Verify the path exists
+        if not os.path.exists(self.data_path):
+            print(f"Data file not found at: {self.data_path}")
+            print(f"Current working directory: {os.getcwd()}")
         self.model_path = model_path
         self.models = {
             'random_forest': RandomForestClassifier(
@@ -35,56 +54,47 @@ class ModelTrainer:
         self.best_score = 0
         self.best_model_name = None
 
-    def train_and_evaluate(self, X_train, y_train, X_test=None, y_test=None):
-        """
-        Train and evaluate multiple models using cross-validation
+    def perform_cross_validation(self, model, X, y):
+        if X is None or y is None:
+            print("Cannot perform cross-validation with None values")
+            return 0.0
 
-        Args:
-            X_train: Training features
-            y_train: Training labels
-            X_test: Test features (optional)
-            y_test: Test labels (optional)
+        try:
+            scores = cross_val_score(model, X, y, cv=5)
+            return np.mean(scores)
+        except Exception as e:
+            print(f"Cross-validation error: {str(e)}")
+            return 0.0
 
-        Returns:
-            best_model: The best performing model
-        """
-        results = {}
+    def train_and_evaluate(self, X_train, y_train):
+        if X_train is None or y_train is None:
+            print("Training data is None. Cannot proceed with model training.")
+            return None
 
-        for name, model in self.models.items():
-            try:
-                # Perform cross-validation
-                scores = cross_val_score(model, X_train, y_train, cv=5, scoring='accuracy')
-                mean_score = scores.mean()
-                std_score = scores.std()
+        if self.best_model_name == 'xgboost':
+            self.best_model = xgb.XGBClassifier(
+                n_estimators=100,
+                learning_rate=0.1,
+                max_depth=5,
+                random_state=42
+            )
+        elif self.best_model_name == 'adaboost':
+            self.best_model = AdaBoostClassifier(
+                n_estimators=100,
+                learning_rate=1.0,
+                random_state=42
+            )
 
-                results[name] = {
-                    'mean_cv_score': mean_score,
-                    'std_cv_score': std_score
-                }
+        if self.best_model is None:
+            print("Model initialization failed")
+            return None
 
-                print(f"{name}:")
-                print(f"CV Score: {mean_score:.4f} (+/- {std_score:.4f})")
-
-                if mean_score > self.best_score:
-                    self.best_score = mean_score
-                    self.best_model = model
-                    self.best_model_name = name
-
-            except Exception as e:
-                print(f"Error training {name}: {str(e)}")
-
-        # Train the best model on full training data
-        print(f"\nBest model: {self.best_model_name} (CV Score: {self.best_score:.4f})")
-        self.best_model.fit(X_train, y_train)
-
-        # If test data is provided, evaluate on it
-        if X_test is not None and y_test is not None:
-            self._evaluate_on_test_set(X_test, y_test)
-
-        # Save the model
-        self._save_model()
-
-        return self.best_model
+        try:
+            self.best_model.fit(X=X_train, y=y_train)
+            return self.best_model
+        except Exception as e:
+            print(f"Error during model training: {str(e)}")
+            return None
 
     def _evaluate_on_test_set(self, X_test, y_test):
         """
@@ -109,7 +119,10 @@ class ModelTrainer:
         print(class_report)
 
     def _save_model(self):
-        """Save the best model to disk"""
+        """
+        Save the best model to disk
+        :return:
+        """
         try:
             # Create directory if it doesn't exist
             os.makedirs(self.model_path, exist_ok=True)
@@ -134,6 +147,23 @@ class ModelTrainer:
 
         except Exception as e:
             print(f"Error saving model: {str(e)}")
+
+    def load_data(self):
+        """
+        Load the processed training data from a CSV file.
+
+        Returns:
+            X: Features
+            y: Labels
+        """
+        try:
+            df = pd.read_csv('data/processed/processed_data.csv')
+            X = df.drop('target', axis=1)
+            y = df['target']
+            return X, y
+        except Exception as e:
+            print(f"Error loading data: {str(e)}")
+            return None, None
 
     def load_model(self):
         """
@@ -163,3 +193,70 @@ class ModelTrainer:
         if self.best_model is None:
             raise ValueError("No model has been trained yet!")
         return self.best_model.predict(X)
+
+    def train_model(self):
+        """
+        Train the model using the training data and save it to disk.
+
+        Return: void
+        """
+
+        # Load training data
+        X_train, y_train = _load_data()
+
+        # Train and evaluate models
+        best_model = self.train_and_evaluate(X_train, y_train)
+
+        # Save the best model
+        self._save_model()
+
+        return best_model
+
+    def load_dataset(self):
+        """
+        Load the dataset from a CSV file.
+
+        Returns:
+            df: The loaded dataset
+        """
+        try:
+            df = pd.read_csv('data/raw/dataset.csv')
+            return df
+        except Exception as e:
+            print(f"Error loading dataset: {str(e)}")
+            return None
+
+    def preprocess_dataset(self):
+        """
+        Preprocess the dataset.
+
+        Returns:
+            df: The preprocessed dataset
+        """
+        try:
+            df = self.load_dataset()
+            df = df.dropna()
+            df = df.drop_duplicates()
+            df = df.drop(['agency_name', 'agency_id'], axis=1)
+            df = df.drop(['agency_name', 'agency_id'], axis=1)
+            df = df.drop(['agency_name', 'agency_id'], axis=1)
+            # Convert target to binary
+            df['target'] = df['target'].apply(lambda x: 1 if x == 'Yes' else 0)
+            return df
+        except Exception as e:
+            print(f"Error preprocessing dataset: {str(e)}")
+            return None
+
+    def save_dataset(self):
+        """
+        Save the preprocessed dataset to a CSV file.
+
+        Returns:
+            void
+        """
+        try:
+            df = self.preprocess_dataset()
+            df.to_csv('data/processed/processed_data.csv', index=False)
+        except Exception as e:
+            print(f"Error saving dataset: {str(e)}")
+            return None
