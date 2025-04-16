@@ -1,31 +1,38 @@
-from flask import Flask, request, render_template, get_flashed_messages
+"""
+Routes for the Insurance Claim Prediction application.
+This module contains the Flask routes for the web application.
+"""
+
+from flask import Blueprint, request, render_template
 from models.ml_model import MLModel
-from utils.data_verification import verify_data_structure
+from utils.data_verification import verify_data_structure, validate_input
 import pandas as pd
 import logging
 
-app = Flask(__name__)
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+# Create blueprint
+main_bp = Blueprint('main', __name__)
 
-@app.route('/')
+@main_bp.route('/')
 def index():
+    """Route for the home page."""
     try:
         mdl = MLModel()
         df = mdl.clean_dataset(mdl.process_dataset())
         mdl.train_model(df)
         return render_template('index.html')
     except Exception as e:
-        app.logger.error(f"Error in index route: {str(e)}")
+        logger.error(f"Error in index route: {str(e)}")
         return render_template('error.html',
                                error="An error occurred while processing the request. Please check the logs.",
                                details=str(e))
 
-
-@app.route('/predict', methods=['POST'])
+@main_bp.route('/predict', methods=['POST'])
 def predict():
+    """Route for making predictions."""
     try:
         if not verify_data_structure():
             return render_template('error.html',
@@ -48,7 +55,6 @@ def predict():
 
             # Validate agency_type
             try:
-                from utils.data_verification import validate_input
                 validate_input(agency_type)
             except ValueError as e:
                 return render_template('error.html', error=str(e))
@@ -89,12 +95,12 @@ def predict():
                     try:
                         # Validate that the Agency Type value is one that the model knows about
                         if agency_type_value not in mdl.label_encoder.classes_:
-                            app.logger.error(f"Invalid Agency Type value: {agency_type_value}")
+                            logger.error(f"Invalid Agency Type value: {agency_type_value}")
                             return render_template('error.html',
                                                    error=f"Invalid 'Agency Type' value: {agency_type_value}. Must be one of {list(mdl.label_encoder.classes_)}")
-                        app.logger.info(f"Valid Agency Type value: {agency_type_value}")
+                        logger.info(f"Valid Agency Type value: {agency_type_value}")
                     except Exception as e:
-                        app.logger.error(f"Error validating Agency Type: {str(e)}")
+                        logger.error(f"Error validating Agency Type: {str(e)}")
                         return render_template('error.html',
                                                error=f"Error validating Agency Type: {str(e)}")
 
@@ -125,16 +131,12 @@ def predict():
                 return render_template('predict.html', prediction=result)
 
             except Exception as e:
-                app.logger.error(f"Prediction error: {str(e)}")
+                logger.error(f"Prediction error: {str(e)}")
                 return render_template('error.html',
                                        error="Error making prediction. Please check the input format.")
         return None
 
     except Exception as e:
-        app.logger.error(f"Unhandled exception: {str(e)}")
+        logger.error(f"Unhandled exception: {str(e)}")
         return render_template('error.html',
                                error="An unexpected error occurred. Please check the logs.")
-
-
-if __name__ == '__main__':
-    app.run(debug=True)

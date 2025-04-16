@@ -1,0 +1,71 @@
+/* 
+ * Main stylesheet for the Insurance Claim Prediction application.
+ * This file contains custom styles for the application.
+ */
+
+/* Custom styles for the application */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.alert {
+    border-radius: 0.25rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    color: #0c5460;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+footer {
+    margin-top: 2rem;
+    padding: 1rem 0;
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+}
