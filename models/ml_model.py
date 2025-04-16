@@ -1,3 +1,4 @@
+import logging
 import os
 import pandas as pd
 from pathlib import Path
@@ -84,26 +85,39 @@ class MLModel:
         try:
             df = load_raw_data()
 
-            if df.empty:
-                raise ValueError("The loaded dataset is empty")
+            if df is None or df.empty:
+                raise ValueError("The loaded dataset is empty or could not be loaded.")
 
-            required_columns = ['Agency', 'Agency Type']
+            required_columns = ['Agency', 'Agency Type', 'Distribution Channel', 'Product Name',
+                                'Claim', 'Duration', 'Destination', 'Net Sales',
+                                'Commission (in value)', 'Gender', 'Age']
             missing_columns = [col for col in required_columns if col not in df.columns]
 
             if missing_columns:
                 raise ValueError(f"Missing required columns: {missing_columns}")
 
+            # Encode categorical columns
             self.label_encoder = LabelEncoder()
             df['agency_type_encoded'] = self.label_encoder.fit_transform(df['Agency Type'])
-            df['Agency'] = df['Agency'].astype(str)
-            df['Agency Type'] = df['Agency Type'].astype(str)
-            # save the processed data
-            df.to_csv(os.path.join(os.getcwd(), 'data', 'processed', 'processed_data.csv'), index=False)
-            print("Processed dataset saved successfully.")
+            df = pd.get_dummies(df, columns=['Agency', 'Agency Type', 'Distribution Channel',
+                                             'Product Name', 'Destination', 'Gender'],
+                                prefix_sep='_')
+
+            # Set feature names for training
+            self.feature_names = [col for col in df.columns if col not in ['Claim', 'agency_type_encoded']]
+
+            # Log the processed columns
+            logging.info(f"Processed dataset columns: {self.feature_names}")
+
+            # Save the processed data
+            processed_path = os.path.join(os.getcwd(), 'data', 'processed', 'processed_data.csv')
+            df.to_csv(processed_path, index=False)
+            logging.info(f"Processed dataset saved successfully at {processed_path}")
+
             return df
 
         except Exception as e:
-            print(f"Error processing dataset: {str(e)}")
+            logging.error(f"Error processing dataset: {str(e)}")
             return None
 
     def train_model(self, df):
@@ -111,12 +125,9 @@ class MLModel:
             if df is None:
                 raise ValueError("No data available for training")
 
-            X = df[['Agency', 'Agency Type']]
+            # Use the processed feature names
+            X = df[self.feature_names]
             y = df['agency_type_encoded']
-
-            self.feature_names = X.columns.tolist()
-
-            X = pd.get_dummies(X)
 
             X_train, X_test, y_train, y_test = train_test_split(
                 X, y, test_size=0.2, random_state=42
@@ -125,7 +136,12 @@ class MLModel:
             self.model = RandomForestClassifier(random_state=42)
             self.model.fit(X_train, y_train)
 
+            print("Model training completed successfully.")
             return True
+
+        except Exception as e:
+            print(f"Error training model: {str(e)}")
+            return False
 
         except Exception as e:
             print(f"Error training model: {str(e)}")
