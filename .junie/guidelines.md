@@ -40,7 +40,7 @@ data/
 
 - Create these directories if they don't exist
 - Place your raw dataset in `data/raw/dataset.csv`
-- The application will verify this structure using `verify_data_structure()` from `utils/data_verification.py`
+- The app will verify this structure using `verify_data_structure()` from `utils/data_verification.py`
 
 ### Required Dataset Columns
 
@@ -59,7 +59,7 @@ The dataset must include the following columns:
 
 ### Running the Application
 
-The application is a Flask web app that can be started with:
+The app is a Flask web app that can be started with:
 
 ```powershell
 python web_app/app.py
@@ -134,7 +134,7 @@ test_df = pd.DataFrame({
   ```python
   def function_name(param1, param2):
       """
-      Brief description of function
+      Brief description of the function
       
       :param param1: Description of param1
       :param param2: Description of param2
@@ -146,16 +146,16 @@ test_df = pd.DataFrame({
 
 - `models/`: Contains machine learning model definitions
 - `utils/`: Utility functions and common imports
-- `web_app/`: Flask web application
+- `web_app/`: Flask web app
 - `data/`: Data directory (raw and processed)
 - `notebooks/`: Jupyter notebooks for analysis
 - `tests/`: Test files
 
-### Key Components
+### Key Parts
 
 1. **MLModel Class** (`models/ml_model.py`):
    - Handles data processing, cleaning, and model training
-   - Uses RandomForestClassifier for prediction
+   - Use RandomForestClassifier for prediction
    - Requires specific columns in the input data
 
 2. **Data Verification** (`utils/data_verification.py`):
@@ -164,13 +164,13 @@ test_df = pd.DataFrame({
    - Sets up logging
 
 3. **Web Application** (`web_app/app.py`):
-   - Flask application for model interaction
+   - Flask app for model interaction
    - Provides endpoints for prediction
    - Handles errors and input validation
 
 ### Error Handling
 
-- The application uses Python's exception handling with specific error messages
+- The app uses Python's exception handling with specific error messages
 - Flask routes include try-except blocks to catch and display errors
 - Logging is configured in both the web app and model components
 
