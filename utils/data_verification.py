@@ -22,7 +22,7 @@ def verify_data_structure():
     required_structure = {
         'data': {
             'processed': ['processed_data.csv'],
-            'raw': []
+            'raw': ['dataset.csv']
         }
     }
 

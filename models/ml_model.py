@@ -83,6 +83,40 @@ class MLModel:
 
     def process_dataset(self):
         try:
+            # Try to load processed data first
+            try:
+                df = load_processed_data()
+                logging.info("Loaded pre-processed data")
+
+                # Initialize label encoder
+                self.label_encoder = LabelEncoder()
+
+                # Ensure agency_type_encoded exists
+                if 'agency_type_encoded' not in df.columns:
+                    # If not, we need to encode it
+                    if 'Agency Type' in df.columns:
+                        df['agency_type_encoded'] = self.label_encoder.fit_transform(df['Agency Type'])
+                    else:
+                        raise ValueError("Neither 'agency_type_encoded' nor 'Agency Type' found in processed data")
+                else:
+                    # If agency_type_encoded exists but we still need to initialize the label encoder
+                    if 'Agency Type' in df.columns:
+                        self.label_encoder.fit(df['Agency Type'])
+                    else:
+                        # Create a mapping of encoded values back to original values
+                        unique_encoded = df['agency_type_encoded'].unique()
+                        # Use default values if we can't determine the original values
+                        original_values = ['airlines', 'travel_agency', 'direct'][:len(unique_encoded)]
+                        self.label_encoder.fit(original_values)
+
+                # Set feature names for training (including Claim as a feature, excluding Agency Type)
+                self.feature_names = [col for col in df.columns if col != 'agency_type_encoded' and col != 'Agency Type']
+
+                return df
+            except FileNotFoundError:
+                logging.info("No processed data found, processing raw data...")
+
+            # If processed data not found, load and process raw data
             df = load_raw_data()
 
             if df is None or df.empty:
@@ -96,15 +130,17 @@ class MLModel:
             if missing_columns:
                 raise ValueError(f"Missing required columns: {missing_columns}")
 
-            # Encode categorical columns
+            # Encode categorical columns - only encode Agency Type once
             self.label_encoder = LabelEncoder()
             df['agency_type_encoded'] = self.label_encoder.fit_transform(df['Agency Type'])
-            df = pd.get_dummies(df, columns=['Agency', 'Agency Type', 'Distribution Channel',
+
+            # One-hot encode other categorical columns (excluding Agency Type which is already encoded)
+            df = pd.get_dummies(df, columns=['Agency', 'Distribution Channel',
                                              'Product Name', 'Destination', 'Gender'],
                                 prefix_sep='_')
 
-            # Set feature names for training
-            self.feature_names = [col for col in df.columns if col not in ['Claim', 'agency_type_encoded']]
+            # Set feature names for training (including Claim as a feature, excluding Agency Type)
+            self.feature_names = [col for col in df.columns if col != 'agency_type_encoded' and col != 'Agency Type']
 
             # Log the processed columns
             logging.info(f"Processed dataset columns: {self.feature_names}")
@@ -136,12 +172,11 @@ class MLModel:
             self.model = RandomForestClassifier(random_state=42)
             self.model.fit(X_train, y_train)
 
-            print("Model training completed successfully.")
+            # Validate the model
+            y_pred = self.model.predict(X_test)
+            accuracy = (y_pred == y_test).mean()
+            print(f"Model training completed successfully. Accuracy: {accuracy:.2f}")
             return True
-
-        except Exception as e:
-            print(f"Error training model: {str(e)}")
-            return False
 
         except Exception as e:
             print(f"Error training model: {str(e)}")

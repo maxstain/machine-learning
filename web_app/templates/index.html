@@ -5,11 +5,80 @@
 <div class="container mt-4">
     <h1>Insurance Claim Prediction</h1>
     <form action="{{ url_for('predict') }}" method="post">
-        <div class="my-2">
-            <label for="agency_type">Agency Type:</label>
-            <input id="agency_type" type="text" name="agency_type" required>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group my-2">
+                    <label for="agency">Agency:</label>
+                    <input id="agency" class="form-control" type="text" name="Agency" required>
+                </div>
+
+                <div class="form-group my-2">
+                    <label for="agency_type">Agency Type:</label>
+                    <select id="agency_type" class="form-control" name="agency_type" required>
+                        <option value="airlines">Airlines</option>
+                        <option value="travel_agency">Travel Agency</option>
+                        <option value="direct">Direct</option>
+                    </select>
+                </div>
+
+                <div class="form-group my-2">
+                    <label for="distribution_channel">Distribution Channel:</label>
+                    <input id="distribution_channel" class="form-control" type="text" name="Distribution Channel" required>
+                </div>
+
+                <div class="form-group my-2">
+                    <label for="product_name">Product Name:</label>
+                    <input id="product_name" class="form-control" type="text" name="Product Name" required>
+                </div>
+
+                <div class="form-group my-2">
+                    <label for="claim">Claim:</label>
+                    <select id="claim" class="form-control" name="Claim" required>
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </div>
+
+                <div class="form-group my-2">
+                    <label for="duration">Duration:</label>
+                    <input id="duration" class="form-control" type="number" name="Duration" required>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group my-2">
+                    <label for="destination">Destination:</label>
+                    <input id="destination" class="form-control" type="text" name="Destination" required>
+                </div>
+
+                <div class="form-group my-2">
+                    <label for="net_sales">Net Sales:</label>
+                    <input id="net_sales" class="form-control" type="number" step="0.01" name="Net Sales" required>
+                </div>
+
+                <div class="form-group my-2">
+                    <label for="commission">Commission (in value):</label>
+                    <input id="commission" class="form-control" type="number" step="0.01" name="Commission (in value)" required>
+                </div>
+
+                <div class="form-group my-2">
+                    <label for="gender">Gender:</label>
+                    <select id="gender" class="form-control" name="Gender" required>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                    </select>
+                </div>
+
+                <div class="form-group my-2">
+                    <label for="age">Age:</label>
+                    <input id="age" class="form-control" type="number" name="Age" required>
+                </div>
+            </div>
         </div>
-        <button class="btn btn-success" type="submit">Predict</button>
+
+        <div class="text-center mt-3">
+            <button class="btn btn-success" type="submit">Predict</button>
+        </div>
     </form>
 </div>
 {% endblock %}
