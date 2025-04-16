@@ -112,6 +112,7 @@ def predict():
                 app.logger.error(f"Prediction error: {str(e)}")
                 return render_template('error.html',
                                        error="Error making prediction. Please check the input format.")
+        return None
 
     except Exception as e:
         app.logger.error(f"Unhandled exception: {str(e)}")
