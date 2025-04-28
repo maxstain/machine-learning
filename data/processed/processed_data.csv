@@ -1,4 +1,0 @@
-Agency Type,Claim,Duration,Net Sales,Commission (in value),Age,agency_type_encoded,Agency_Agency1,Agency_Agency2,Agency_Agency3,Distribution Channel_Channel1,Distribution Channel_Channel2,Distribution Channel_Channel3,Product Name_Product1,Product Name_Product2,Product Name_Product3,Destination_Dest1,Destination_Dest2,Destination_Dest3,Gender_F,Gender_M
-airlines,0,10,100,10,25,0,True,False,False,True,False,False,True,False,False,True,False,False,False,True
-travel_agency,1,20,200,20,35,2,False,True,False,False,True,False,False,True,False,False,True,False,True,False
-direct,0,30,300,30,45,1,False,False,True,False,False,True,False,False,True,False,False,True,False,True

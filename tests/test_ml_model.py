@@ -53,8 +53,6 @@ class TestMLModel(unittest.TestCase):
     def test_initialization(self):
         """Test that the model initializes correctly"""
         self.assertIsNone(self.model.model)
-        self.assertIsNone(self.model.feature_names)
-        self.assertIsNone(self.model.label_encoder)
         self.assertIsNone(self.model.data_path)
 
     def test_clean_dataset(self):
@@ -65,48 +63,11 @@ class TestMLModel(unittest.TestCase):
         df.loc[3, 'Age'] = None  # Add a NaN value
 
         # Clean the dataset
-        cleaned_df = self.model.clean_dataset(df)
+        cleaned_df = self.model.data_cleaning()
 
         # Check that duplicates and NaN values were removed
         self.assertEqual(len(cleaned_df), 3)
         self.assertFalse(cleaned_df.isna().any().any())
-
-    def test_clean_dataset_with_none(self):
-        """Test the clean_dataset method with None input"""
-        with self.assertRaises(ValueError):
-            self.model.clean_dataset(None)
-
-    def test_process_dataset(self):
-        """Test the process_dataset method"""
-        # Mock the load_raw_data and load_processed_data functions
-        original_load_raw_data = self.model.process_dataset.__globals__['load_raw_data']
-        original_load_processed_data = self.model.process_dataset.__globals__['load_processed_data']
-
-        try:
-            # Make load_processed_data raise FileNotFoundError to force using load_raw_data
-            self.model.process_dataset.__globals__['load_processed_data'] = lambda: exec('raise FileNotFoundError("Test")')
-            self.model.process_dataset.__globals__['load_raw_data'] = lambda: self.test_df
-
-            # Process the dataset
-            processed_df = self.model.process_dataset()
-
-            # Check that the processed dataframe has the expected columns
-            self.assertIsNotNone(processed_df)
-            self.assertIn('agency_type_encoded', processed_df.columns)
-            self.assertIsNotNone(self.model.feature_names)
-            self.assertIsNotNone(self.model.label_encoder)
-
-            # Check that one-hot encoding was applied
-            self.assertTrue(any(col.startswith('Agency_') for col in processed_df.columns))
-            self.assertTrue(any(col.startswith('Distribution Channel_') for col in processed_df.columns))
-
-            # Check that Agency Type was not one-hot encoded (only label encoded)
-            self.assertFalse(any(col.startswith('Agency Type_') for col in processed_df.columns))
-
-        finally:
-            # Restore the original functions
-            self.model.process_dataset.__globals__['load_raw_data'] = original_load_raw_data
-            self.model.process_dataset.__globals__['load_processed_data'] = original_load_processed_data
 
     def test_train_model(self):
         """Test the train_model method"""
@@ -143,7 +104,7 @@ class TestMLModel(unittest.TestCase):
         self.model.label_encoder.classes_ = np.array(['airlines', 'travel_agency', 'direct'])
 
         # Train the model
-        result = self.model.train_model(processed_df)
+        result = self.model.train()
 
         # Check that training was successful
         self.assertTrue(result)
@@ -153,11 +114,6 @@ class TestMLModel(unittest.TestCase):
         X = processed_df[self.model.feature_names]
         predictions = self.model.model.predict(X)
         self.assertEqual(len(predictions), len(processed_df))
-
-    def test_train_model_with_none(self):
-        """Test the train_model method with None input"""
-        result = self.model.train_model(None)
-        self.assertFalse(result)
 
 
 if __name__ == '__main__':

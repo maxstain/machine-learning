@@ -2,9 +2,17 @@
 
 This application predicts agency types based on various insurance-related features using machine learning.
 
+#### Created by:
+
+- CHABCHOUB Firas
+- ABBASSI Chaima
+- BELHAJ AMOR Ahmed
+- RHOUMA Rached
+
 ## Setup Instructions
 
 ### Prerequisites
+
 - Python 3.8 or higher
 - pip (Python package installer)
 
@@ -18,14 +26,14 @@ This application predicts agency types based on various insurance-related featur
    ```
 
 3. Activate the virtual environment:
-   - On Windows:
-     ```
-     .\.venv\Scripts\Activate
-     ```
-   - On macOS/Linux:
-     ```
-     source .venv/bin/activate
-     ```
+    - On Windows:
+      ```
+      .\.venv\Scripts\Activate
+      ```
+    - On macOS/Linux:
+      ```
+      source .venv/bin/activate
+      ```
 
 4. Install the required packages:
    ```
@@ -46,17 +54,17 @@ The application requires specific data files to be present:
    ```
 
 2. Place your raw dataset in `data/raw/dataset.csv`. The dataset must include the following columns:
-   - 'Agency'
-   - 'Agency Type'
-   - 'Distribution Channel'
-   - 'Product Name'
-   - 'Claim'
-   - 'Duration'
-   - 'Destination'
-   - 'Net Sales'
-   - 'Commission (in value)'
-   - 'Gender'
-   - 'Age'
+    - 'Agency'
+    - 'Agency Type'
+    - 'Distribution Channel'
+    - 'Product Name'
+    - 'Claim'
+    - 'Duration'
+    - 'Destination'
+    - 'Net Sales'
+    - 'Commission (in value)'
+    - 'Gender'
+    - 'Age'
 
    Here's a sample of how your dataset should look:
 
@@ -69,10 +77,10 @@ The application requires specific data files to be present:
    Agency5,travel_agency,Channel2,Product1,0,18,Destination2,1800,180,M,50
    ```
 
-   Note: 
-   - 'Agency Type' must be one of: 'airlines', 'travel_agency', or 'direct'
-   - 'Claim' should be 0 (No) or 1 (Yes)
-   - 'Gender' should be 'M' or 'F'
+   Note:
+    - 'Agency Type' must be one of: 'airlines', 'travel_agency', or 'direct'
+    - 'Claim' should be 0 (No) or 1 (Yes)
+    - 'Gender' should be 'M' or 'F'
 
    Alternatively, you can generate a sample dataset by running:
    ```
@@ -105,17 +113,17 @@ The application requires specific data files to be present:
 ### Making Predictions
 
 1. Fill out the form on the homepage with the required information:
-   - **Agency**: The name of the insurance agency
-   - **Agency Type**: Select from Airlines, Travel Agency, or Direct
-   - **Distribution Channel**: The channel through which the insurance was sold
-   - **Product Name**: The name of the insurance product
-   - **Claim**: Whether a claim was made (Yes/No)
-   - **Duration**: The duration of the insurance policy
-   - **Destination**: The travel destination
-   - **Net Sales**: The net sales amount
-   - **Commission**: The commission value
-   - **Gender**: The gender of the insured person
-   - **Age**: The age of the insured person
+    - **Agency**: The name of the insurance agency
+    - **Agency Type**: Select from Airlines, Travel Agency, or Direct
+    - **Distribution Channel**: The channel through which the insurance was sold
+    - **Product Name**: The name of the insurance product
+    - **Claim**: Whether a claim was made (Yes/No)
+    - **Duration**: The duration of the insurance policy
+    - **Destination**: The travel destination
+    - **Net Sales**: The net sales amount
+    - **Commission**: The commission value
+    - **Gender**: The gender of the insured person
+    - **Age**: The age of the insured person
 
 2. Click the "Predict" button to submit the form.
 
@@ -124,6 +132,7 @@ The application requires specific data files to be present:
 ### Understanding the Results
 
 The prediction result shows the predicted agency type based on the input features. The possible agency types are:
+
 - Airlines
 - Travel Agency
 - Direct
@@ -182,25 +191,25 @@ If you're new to this application, follow these steps to get started quickly:
 The project is organized into the following directories:
 
 - **data/**: Contains the raw and processed data
-  - **raw/**: Raw input data (dataset.csv)
-  - **processed/**: Processed data (processed_data.csv)
+    - **raw/**: Raw input data (dataset.csv)
+    - **processed/**: Processed data (processed_data.csv)
 - **models/**: Contains the machine learning model implementation
-  - **ml_model.py**: Main ML model class
+    - **ml_model.py**: Main ML model class
 - **scripts/**: Contains utility scripts
-  - **generate_sample_dataset.py**: Script to generate a sample dataset
-  - **test_setup.py**: Script to test the setup
+    - **generate_sample_dataset.py**: Script to generate a sample dataset
+    - **test_setup.py**: Script to test the setup
 - **tests/**: Contains test modules
-  - **test_ml_model.py**: Tests for the ML model
+    - **test_ml_model.py**: Tests for the ML model
 - **utils/**: Contains utility functions
-  - **data_verification.py**: Functions for verifying data structure and input
-  - **public_imports.py**: Common imports used across the project
+    - **data_verification.py**: Functions for verifying data structure and input
+    - **public_imports.py**: Common imports used across the project
 - **web_app/**: Contains the Flask web application
-  - **__init__.py**: Application factory
-  - **config.py**: Configuration settings
-  - **errors.py**: Error handling
-  - **routes.py**: Route handlers
-  - **static/**: Static files (CSS, JavaScript, images)
-  - **templates/**: HTML templates
+    - **__init__.py**: Application factory
+    - **config.py**: Configuration settings
+    - **errors.py**: Error handling
+    - **routes.py**: Route handlers
+    - **static/**: Static files (CSS, JavaScript, images)
+    - **templates/**: HTML templates
 - **run.py**: Entry point for the application
 
 ## Additional Information
