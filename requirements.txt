@@ -9,3 +9,5 @@ xgboost~=3.0.0
 matplotlib~=3.10.1
 seaborn~=0.13.2
 jupyter~=1.1.1
+scipy~=1.15.2
+imblearn~=0.0
